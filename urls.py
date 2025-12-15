@@ -1,5 +1,2 @@
 URL = "https://stellarburgers.education-services.ru/"
-PERSONAL_ACCOUNT= "https://stellarburgers.education-services.ru/login"
-REGISTRATION = "https://stellarburgers.education-services.ru/register"
-PASSWORD = "https://stellarburgers.education-services.ru/forgot-password"
-PROFILE = "https://stellarburgers.education-services.ru/account/profile"
+
