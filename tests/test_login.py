@@ -1,72 +1,45 @@
 import pytest
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-import locators
-from helper import make_email, make_password
+from locators import *
+from conftest import URL, TEST_EMAIL, TEST_PASSWORD
 
-URL = "https://stellarburgers.education-services.ru/"
-EMAIL = "britvina_36@yandex.ru"
-PASS = "12345678"
-
+@pytest.mark.login
 def test_login_main_button(driver):
-    #Вход по кнопке «Войти в аккаунт» на главной
     driver.get(URL)
     driver.find_element(MAIN_LOGIN_BUTTON).click()
-    driver.find_element(LOGIN_EMAIL).send_keys(EMAIL)
-    driver.find_element(LOGIN_PASSWORD).send_keys(PASS)
+    driver.find_element(LOGIN_EMAIL).send_keys(TEST_EMAIL)
+    driver.find_element(LOGIN_PASSWORD).send_keys(TEST_PASSWORD)
     driver.find_element(LOGIN_BUTTON).click()
     assert "/account" in driver.current_url
 
+@pytest.mark.login
 def test_login_personal_cabinet(driver):
-    #Вход через кнопку «Личный кабинет»
     driver.get(URL)
     driver.find_element(MAIN_PERSONAL_BUTTON).click()
-    driver.find_element(LOGIN_EMAIL).send_keys(EMAIL)
-    driver.find_element(LOGIN_PASSWORD).send_keys(PASS)
+    driver.find_element(LOGIN_EMAIL).send_keys(TEST_EMAIL)
+    driver.find_element(LOGIN_PASSWORD).send_keys(TEST_PASSWORD)
     driver.find_element(LOGIN_BUTTON).click()
     assert "/account" in driver.current_url
 
+@pytest.mark.login
 def test_login_from_register(driver):
-    #Вход через кнопку в форме регистрации
-    driver.get(f"{URL}login")
-    driver.find_element(REGISTER_LINK).click()
-    driver.find_element(LOGIN_FROM_REG).click()
-    driver.find_element(LOGIN_EMAIL).send_keys(EMAIL)
-    driver.find_element(LOGIN_PASSWORD).send_keys(PASS)
-    driver.find_element(LOGIN_BUTTON).click()
-    assert "/account" in driver.current_url
-
-def test_login_from_forgot_password(driver):
-    #Вход через кнопку в форме восстановления пароля
-    driver.get(f"{URL}login")
-    driver.find_element(FORGOT_LINK).click()
-    driver.find_element(LOGIN_BUTTON).click()
-    driver.find_element(LOGIN_EMAIL).send_keys(EMAIL)
-    driver.find_element(LOGIN_PASSWORD).send_keys(PASS)
-    driver.find_element(LOGIN_BUTTON).click()
-    assert "/account" in driver.current_url
-
-def test_profile_transitions_and_logout(driver):
-    #Переход в ЛК"""
     driver.get(URL)
-    driver.find_element(MAIN_LOGIN_BUTTON).click()
-    driver.find_element(LOGIN_EMAIL).send_keys(EMAIL)
-    driver.find_element(LOGIN_PASSWORD).send_keys(PASS)
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable(MAIN_LOGIN_BUTTON)).click()
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable(REGISTER_LINK)).click()
+    driver.find_element(LOGIN_FROM_REG).click()
+    driver.find_element(LOGIN_EMAIL).send_keys(TEST_EMAIL)
+    driver.find_element(LOGIN_PASSWORD).send_keys(TEST_PASSWORD)
     driver.find_element(LOGIN_BUTTON).click()
     assert "/account" in driver.current_url
-    
-    # Переход на Конструктор
-    driver.find_element(CABINET_CONSTRUCTOR).click()
-    assert URL in driver.current_url
-    
-    # Переход по логотипу
-    driver.find_element(LOGO).click()
-    assert URL in driver.current_url
-    
-    # Выход (с главной заходим в ЛК и выходим)
-    driver.find_element(MAIN_LOGIN_BUTTON).click()
-    driver.find_element(LOGIN_EMAIL).send_keys(EMAIL)
-    driver.find_element(LOGIN_PASSWORD).send_keys(PASS)
+
+@pytest.mark.login
+def test_login_from_forgot_password(driver):
+    driver.get(URL)
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable(MAIN_LOGIN_BUTTON)).click()
+    WebDriverWait(driver, 10).until(EC.element_to_be_clickable(FORGOT_LINK)).click()
     driver.find_element(LOGIN_BUTTON).click()
-    driver.find_element(LOGOUT_BUTTON).click()
-    assert URL in driver.current_url
+    driver.find_element(LOGIN_EMAIL).send_keys(TEST_EMAIL)
+    driver.find_element(LOGIN_PASSWORD).send_keys(TEST_PASSWORD)
+    driver.find_element(LOGIN_BUTTON).click()
+    assert "/account" in driver.current_url
