@@ -1,7 +1,7 @@
 import pytest
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
-from pages.locators import *
+import locators
 
 URL = "https://stellarburgers.education-services.ru/"
 EMAIL = "britvina_36@yandex.ru"
